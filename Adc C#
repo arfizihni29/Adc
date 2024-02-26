@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+
+namespace SimpleAirdropCrypto
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Definisikan kelas untuk token
+            class Token
+            {
+                public string Name { get; set; }
+                public int Amount { get; set; }
+            }
+
+            // Inisialisasi daftar token yang akan di-"airdrop"
+            List<Token> tokensToAirdrop = new List<Token>
+            {
+                new Token { Name = "TokenA", Amount = 100 },
+                new Token { Name = "TokenB", Amount = 200 },
+                new Token { Name = "TokenC", Amount = 300 }
+            };
+
+            // Daftar penerima "airdrop"
+            Dictionary<string, List<Token>> recipients = new Dictionary<string, List<Token>>
+            {
+                { "Recipient1", new List<Token> { new Token { Name = "TokenA", Amount = 50 }, new Token { Name = "TokenB", Amount = 50 } } },
+                { "Recipient2", new List<Token> { new Token { Name = "TokenB", Amount = 100 }, new Token { Name = "TokenC", Amount = 100 } } },
+                { "Recipient3", new List<Token> { new Token { Name = "TokenA", Amount = 25 }, new Token { Name = "TokenC", Amount = 25 } } }
+            };
+
+            // Proses airdrop
+            foreach (var recipient in recipients)
+            {
+                Console.WriteLine($"Sending tokens to {recipient.Key}:");
+                foreach (var token in recipient.Value)
+                {
+                    // Cari token yang sesuai dari daftar tokensToAirdrop
+                    foreach (var airdropToken in tokensToAirdrop)
+                    {
+                        if (token.Name == airdropToken.Name)
+                        {
+                            // Periksa apakah jumlah token yang dikirim tidak melebihi jumlah yang tersedia
+                            if (token.Amount <= airdropToken.Amount)
+                            {
+                                airdropToken.Amount -= token.Amount;
+                                Console.WriteLine($"- Sent {token.Amount} {token.Name}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"- Insufficient {token.Name} to send to {recipient.Key}");
+                            }
+                            break;
+                        }
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            // Tampilkan sisa token setelah airdrop
+            Console.WriteLine("Remaining tokens after airdrop:");
+            foreach (var token in tokensToAirdrop)
+            {
+                Console.WriteLine($"{token.Amount} {token.Name}");
+            }
+        }
+
+# https://tea.xyz/what-is-this-file
+---
+version: 1.0.0
+codeOwners:
+  - '0x222bD00B4f353638726037CB0F303cCbAf4eb3AD'
+quorum: 1
+
+    }
+}
